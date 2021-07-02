@@ -13,21 +13,23 @@ npm install qbittorrent-api-v2
 # Example
 
 ```js
-const api = require('qbittorrent-api-v2')
+const api = require("qbittorrent-api-v2");
 
-api.connect('http://localhost:8080', 'admin', 'your_password')
-	.then(qbt => {
-		qbt.torrents()
-			.then(torrents => {
-				console.log(torrents)
-			})
-			.catch(err => {
-				console.error(err)
-			})
-	})
-	.catch(err => {
-		console.error(err)
-	})
+api
+  .connect("http://localhost:8080", "admin", "your_password")
+  .then((qbt) => {
+    qbt
+      .torrents()
+      .then((torrents) => {
+        console.log(torrents);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 ```
 
 # Documentation

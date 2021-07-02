@@ -1581,6 +1581,7 @@ function performRequest(opt, cookie, path, parameters) {
       res
         .on("data", (chunk) => data.push(chunk))
         .on("end", () => {
+          console.log(data)
           if (res.statusCode == 200) {
             var c = null;
             if (res.headers["set-cookie"] != undefined) {
