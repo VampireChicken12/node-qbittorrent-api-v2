@@ -1565,7 +1565,6 @@ function performRequest(opt, cookie, path, parameters) {
       Cookie: cookie,
     },
   };
-  console.log(options, data);
   return new Promise((resolve, reject) => {
     const req = protocol[options.protocol].request(options, (res) => {
       let data = [];
@@ -1573,7 +1572,6 @@ function performRequest(opt, cookie, path, parameters) {
       res
         .on("data", (chunk) => data.push(chunk))
         .on("end", () => {
-          console.log(Buffer.concat(data).toString());
           if (res.statusCode == 200) {
             var c = null;
             if (res.headers["set-cookie"] != undefined) {
