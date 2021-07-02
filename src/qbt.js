@@ -1558,30 +1558,22 @@ function performRequest(opt, cookie, path, parameters) {
     path: ENDPOINT + path,
     method: "POST",
     headers: {
-      Referer:
-        opt.protocol +
-        "//" +
-        opt.hostname +
-        (opt.port != 80 || opt.port != 443 ? ":" + opt.port : ""),
-      Origin:
-        opt.protocol +
-        "//" +
-        opt.hostname +
-        (opt.port != 80 || opt.port != 443 ? ":" + opt.port : ""),
+      Referer: opt.protocol + "//" + opt.hostname,
+      Origin: opt.protocol + "//" + opt.hostname,
       "Content-Type": "application/x-www-form-urlencoded",
       "Content-Length": data.length,
       Cookie: cookie,
     },
   };
-  console.log(options, data)
+  console.log(options, data);
   return new Promise((resolve, reject) => {
     const req = protocol[options.protocol].request(options, (res) => {
       let data = [];
-     
+
       res
         .on("data", (chunk) => data.push(chunk))
         .on("end", () => {
-          console.log(Buffer.concat(data).toString())
+          console.log(Buffer.concat(data).toString());
           if (res.statusCode == 200) {
             var c = null;
             if (res.headers["set-cookie"] != undefined) {
