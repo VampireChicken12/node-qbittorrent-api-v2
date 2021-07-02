@@ -1577,7 +1577,7 @@ function performRequest(opt, cookie, path, parameters) {
   return new Promise((resolve, reject) => {
     const req = protocol[options.protocol].request(options, (res) => {
       let data = [];
-
+      console.log(options, data)
       res
         .on("data", (chunk) => data.push(chunk))
         .on("end", () => {
