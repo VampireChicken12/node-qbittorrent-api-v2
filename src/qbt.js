@@ -565,7 +565,14 @@ exports.connect = async (host, username, password) => {
        * @param {string} urls - URLs of the trackers, separated by a newline `\n`
        */
       addTorrent: async (urls, category, savepath, upLimit) => {
-        return await addTorrent(options, cookie, urls, category, savepath, upLimit);
+        return await addTorrent(
+          options,
+          cookie,
+          urls,
+          category,
+          savepath,
+          upLimit
+        );
       },
       /**
        * Add trackers to torrent
@@ -1214,7 +1221,7 @@ async function addTorrent(options, cookie, urls, category, savepath, upLimit) {
     urls: encodeURI(urls),
     category,
     savepath,
-    upLimit
+    upLimit,
   });
   return;
 }
@@ -1568,18 +1575,16 @@ function performRequest(opt, cookie, path, parameters) {
     path: ENDPOINT + path,
     method: "POST",
     headers: {
-      Referer:
-        opt.protocol + "//" + opt.hostname + ValidateIPaddress(opt.hostname)
-          ? opt.port != 80 || opt.port != 443
-            ? ":" + opt.port
-            : ""
-          : "",
-      Origin:
-        opt.protocol + "//" + opt.hostname + ValidateIPaddress(opt.hostname)
-          ? opt.port != 80 || opt.port != 443
-            ? ":" + opt.port
-            : ""
-          : "",
+      Referer: ValidateIPaddress(opt.hostname)
+        ? opt.protocol + "//" + opt.hostname + opt.port != 80 || opt.port != 443
+          ? ":" + opt.port
+          : ""
+        : opt.protocol + "//" + opt.hostname,
+      Origin: ValidateIPaddress(opt.hostname)
+        ? opt.protocol + "//" + opt.hostname + opt.port != 80 || opt.port != 443
+          ? ":" + opt.port
+          : ""
+        : opt.protocol + "//" + opt.hostname,
       "Content-Type": "application/x-www-form-urlencoded",
       "Content-Length": data.length,
       Cookie: cookie,
