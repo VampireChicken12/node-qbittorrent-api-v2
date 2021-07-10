@@ -564,8 +564,8 @@ exports.connect = async (host, username, password) => {
        * Add torrent
        * @param {string} urls - URLs of the trackers, separated by a newline `\n`
        */
-      addTorrent: async (urls, category, savepath) => {
-        return await addTorrent(options, cookie, urls, category, savepath);
+      addTorrent: async (urls, category, savepath, upLimit) => {
+        return await addTorrent(options, cookie, urls, category, savepath, upLimit);
       },
       /**
        * Add trackers to torrent
@@ -1209,11 +1209,12 @@ async function addPeers(options, cookie, hashes, peers) {
   return;
 }
 
-async function addTorrent(options, cookie, urls, category, savepath) {
+async function addTorrent(options, cookie, urls, category, savepath, upLimit) {
   await performRequest(options, cookie, "/torrents/add", {
     urls: encodeURI(urls),
     category,
     savepath,
+    upLimit
   });
   return;
 }
@@ -1547,7 +1548,16 @@ async function updatePlugins(options, cookie) {
 }
 
 // Utils functions
-
+function ValidateIPaddress(ipaddress) {
+  if (
+    /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
+      ipaddress
+    )
+  ) {
+    return true;
+  }
+  return false;
+}
 function performRequest(opt, cookie, path, parameters) {
   const data = plainify(parameters);
 
@@ -1558,8 +1568,18 @@ function performRequest(opt, cookie, path, parameters) {
     path: ENDPOINT + path,
     method: "POST",
     headers: {
-      Referer: opt.protocol + "//" + opt.hostname,
-      Origin: opt.protocol + "//" + opt.hostname,
+      Referer:
+        opt.protocol + "//" + opt.hostname + ValidateIPaddress(opt.hostname)
+          ? opt.port != 80 || opt.port != 443
+            ? ":" + opt.port
+            : ""
+          : "",
+      Origin:
+        opt.protocol + "//" + opt.hostname + ValidateIPaddress(opt.hostname)
+          ? opt.port != 80 || opt.port != 443
+            ? ":" + opt.port
+            : ""
+          : "",
       "Content-Type": "application/x-www-form-urlencoded",
       "Content-Length": data.length,
       Cookie: cookie,
