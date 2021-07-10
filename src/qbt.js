@@ -1590,7 +1590,7 @@ function performRequest(opt, cookie, path, parameters) {
       Cookie: cookie,
     },
   };
-  console.log(options);
+
   return new Promise((resolve, reject) => {
     const req = protocol[options.protocol].request(options, (res) => {
       let data = [];
