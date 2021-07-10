@@ -1577,12 +1577,12 @@ function performRequest(opt, cookie, path, parameters) {
     headers: {
       Referer: ValidateIPaddress(opt.hostname)
         ? opt.protocol + "//" + opt.hostname + opt.port != 80 || opt.port != 443
-          ? ":" + opt.port
+          ? opt.protocol + "//" + opt.hostname + ":" + opt.port
           : ""
         : opt.protocol + "//" + opt.hostname,
       Origin: ValidateIPaddress(opt.hostname)
         ? opt.protocol + "//" + opt.hostname + opt.port != 80 || opt.port != 443
-          ? ":" + opt.port
+          ? opt.protocol + "//" + opt.hostname + ":" + opt.port
           : ""
         : opt.protocol + "//" + opt.hostname,
       "Content-Type": "application/x-www-form-urlencoded",
