@@ -519,7 +519,7 @@ exports.connect = async (host, username, password) => {
        * @param {boolean} deleteFiles - If set to `true`, the downloaded data will also be deleted, otherwise has no effect
        */
       deleteTorrents: async (hashes, deleteFiles) => {
-        return await deleteTorrents(options, cookie, hashes, deleteFiles);
+        return await deleteTorrents(Object.assign(options, {method: 'GET'}), cookie, hashes, deleteFiles);
       },
       /**
        * Recheck one or several torrents
@@ -1573,7 +1573,7 @@ function performRequest(opt, cookie, path, parameters) {
     protocol: opt.protocol,
     port: opt.port,
     path: ENDPOINT + path,
-    method: "POST",
+    method: opt.method ? opt.method : "POST",
     headers: {
       Referer: ValidateIPaddress(opt.hostname)
         ? opt.protocol + "//" + opt.hostname + opt.port != 80 || opt.port != 443
@@ -1594,7 +1594,6 @@ function performRequest(opt, cookie, path, parameters) {
   return new Promise((resolve, reject) => {
     const req = protocol[options.protocol].request(options, (res) => {
       let data = [];
-      console.log(res)
       res
         .on("data", (chunk) => data.push(chunk))
         .on("end", () => {
@@ -1609,7 +1608,6 @@ function performRequest(opt, cookie, path, parameters) {
           }
         });
     });
-    console.log(req)
     req.on("error", (err) => reject(err));
 
     req.write(data);
