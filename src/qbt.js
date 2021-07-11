@@ -1626,8 +1626,5 @@ function performRequest(opt, cookie, path, parameters) {
  * @return {string} Plain text parameters
  */
 function plainify(json) {
-  let str = JSON.stringify(json);
-  str = str.replace(/{([^}]*)}/g, "$1");
-  str = str.replace(/"([^"]*)":"([^"]*)",?/g, "$1=$2&");
-  return str;
+  return new URLSearchParams(json).toString();
 }
