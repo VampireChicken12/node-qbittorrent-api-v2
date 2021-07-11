@@ -1594,7 +1594,7 @@ function performRequest(opt, cookie, path, parameters) {
   return new Promise((resolve, reject) => {
     const req = protocol[options.protocol].request(options, (res) => {
       let data = [];
-
+      console.log(res)
       res
         .on("data", (chunk) => data.push(chunk))
         .on("end", () => {
@@ -1609,7 +1609,7 @@ function performRequest(opt, cookie, path, parameters) {
           }
         });
     });
-
+    console.log(req)
     req.on("error", (err) => reject(err));
 
     req.write(data);
