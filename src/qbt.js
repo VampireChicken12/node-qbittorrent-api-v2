@@ -519,12 +519,7 @@ exports.connect = async (host, username, password) => {
        * @param {boolean} deleteFiles - If set to `true`, the downloaded data will also be deleted, otherwise has no effect
        */
       deleteTorrents: async (hashes, deleteFiles) => {
-        return await deleteTorrents(
-          Object.assign(options, { method: "GET" }),
-          cookie,
-          hashes,
-          deleteFiles
-        );
+        return await deleteTorrents(options, cookie, hashes, deleteFiles);
       },
       /**
        * Recheck one or several torrents
@@ -1176,7 +1171,7 @@ async function resumeTorrents(options, cookie, hashes) {
 
 async function deleteTorrents(options, cookie, hashes, deleteFiles) {
   await performRequest(options, cookie, "/torrents/delete", {
-    hashes: "?" + hashes,
+    hashes: hashes,
     deleteFiles: deleteFiles,
   });
   return;
@@ -1572,7 +1567,6 @@ function ValidateIPaddress(ipaddress) {
 }
 function performRequest(opt, cookie, path, parameters) {
   const data = plainify(parameters);
-  console.log({ parameters, data, opt });
   const options = {
     hostname: opt.hostname,
     protocol: opt.protocol,
@@ -1595,7 +1589,7 @@ function performRequest(opt, cookie, path, parameters) {
       Cookie: cookie,
     },
   };
-  console.log({ options });
+
   return new Promise((resolve, reject) => {
     const req = protocol[options.protocol].request(options, (res) => {
       let data = [];
@@ -1626,5 +1620,5 @@ function performRequest(opt, cookie, path, parameters) {
  * @return {string} Plain text parameters
  */
 function plainify(json) {
-  return new URLSearchParams(json).toString();
+  return new URLSearchParams(Object.entries(json)).toString();
 }
