@@ -1572,7 +1572,7 @@ function ValidateIPaddress(ipaddress) {
 }
 function performRequest(opt, cookie, path, parameters) {
   const data = plainify(parameters);
-  console.log({ data, opt });
+  console.log({ parameters, data, opt });
   const options = {
     hostname: opt.hostname,
     protocol: opt.protocol,
