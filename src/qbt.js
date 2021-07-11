@@ -1176,7 +1176,7 @@ async function resumeTorrents(options, cookie, hashes) {
 
 async function deleteTorrents(options, cookie, hashes, deleteFiles) {
   await performRequest(options, cookie, "/torrents/delete", {
-    hashes: hashes,
+    hashes: "?" + hashes,
     deleteFiles: deleteFiles,
   });
   return;
