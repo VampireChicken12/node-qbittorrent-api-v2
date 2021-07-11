@@ -1358,7 +1358,7 @@ async function categories(options, cookie) {
 
 async function createCategory(options, cookie, category, savePath) {
   await performRequest(options, cookie, "/torrents/createCategory", {
-    category: encodeURI(category),
+    category: category,
     savePath: savePath,
   });
   return;
