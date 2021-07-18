@@ -27,7 +27,7 @@ exports.connect = async (host, username, password) => {
        * @return {Promise<string>} The response is a string with the application version, e.g. v4.1.3
        */
       appVersion: async () => {
-        return await appVersion(options, cookie, "GET");
+        return await appVersion(options, cookie);
       },
       /**
        * Get API version
@@ -922,13 +922,8 @@ exports.connect = async (host, username, password) => {
 
 // Application
 
-async function appVersion(options, cookie, method) {
-  const { res } = await performRequest(
-    { ...options, method: method },
-    cookie,
-    "/app/version",
-    {}
-  );
+async function appVersion(options, cookie) {
+  const { res } = await performRequest(options, cookie, "/app/version", {});
   return res;
 }
 
@@ -1556,7 +1551,7 @@ function performRequest(opt, cookie, path, parameters) {
     protocol: opt.protocol,
     port: opt.port,
     path: ENDPOINT + path,
-    method: opt.method ? opt.method : "POST",
+    method: "POST",
     headers: {
       Referer: ValidateIPaddress(opt.hostname)
         ? opt.protocol + "//" + opt.hostname + opt.port != 80 || opt.port != 443
