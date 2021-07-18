@@ -27,7 +27,7 @@ exports.connect = async (host, username, password) => {
        * @return {Promise<string>} The response is a string with the application version, e.g. v4.1.3
        */
       appVersion: async () => {
-        return await appVersion(options, cookie);
+        return await appVersion(options, cookie, "GET");
       },
       /**
        * Get API version
@@ -870,14 +870,6 @@ exports.connect = async (host, username, password) => {
         return await deleteSearch(options, cookie, id);
       },
       /**
-       * Get search categories
-       * @param {string} [pluginName] - Name of the plugin (e.g. "legittorrents"). Also supports 'all' and 'enabled'
-       * @return {Promise<string[]>} List of categories
-       */
-      searchCategories: async (pluginName) => {
-        return await searchCategories(options, cookie, pluginName);
-      },
-      /**
        * @typedef {Object} SearchPlugin
        * @property {boolean} enabled - Whether the plugin is enabled
        * @property {string} fullName - Full name of the plugin
@@ -930,8 +922,13 @@ exports.connect = async (host, username, password) => {
 
 // Application
 
-async function appVersion(options, cookie) {
-  const { res } = await performRequest(options, cookie, "/app/version", {});
+async function appVersion(options, cookie, method) {
+  const { res } = await performRequest(
+    { ...options, method: method },
+    cookie,
+    "/app/version",
+    {}
+  );
   return res;
 }
 
@@ -1509,19 +1506,6 @@ async function deleteSearch(options, cookie, id) {
   return;
 }
 
-async function searchCategories(options, cookie, pluginName) {
-  var parameters = {};
-  if (pluginName) parameters.pluginName = pluginName;
-
-  const { res } = await performRequest(
-    options,
-    cookie,
-    "/search/categories",
-    parameters
-  );
-  return JSON.parse(res);
-}
-
 async function searchPlugins(options, cookie) {
   const { res } = await performRequest(options, cookie, "/search/plugins", {});
   return JSON.parse(res);
@@ -1606,6 +1590,11 @@ function performRequest(opt, cookie, path, parameters) {
             reject(new Error(`HTTP request error: ${res.statusCode}`));
           }
         });
+      console.log({
+        statusCode: res.statusCode,
+        statusMessage: res.statusMessage,
+        path: req.path,
+      });
     });
     req.on("error", (err) => reject(err));
 

@@ -81,11 +81,6 @@ api
       .tags()
       .then((tags) => assert(tags))
       .catch((err) => assert.ifError(err));
-    // Search
-    qbt
-      .searchCategories()
-      .then((categories) => assert(categories))
-      .catch((err) => assert.ifError(err));
     qbt
       .searchPlugins()
       .then((plugins) => assert(plugins))
