@@ -1,6 +1,6 @@
 const assert = require("assert");
 const api = require("../src/qbt");
-
+require('dotenv').config({paht: '../.env'});
 api
   .connect(process.env.HOST, process.env.USER, process.env.PASS)
   .then((qbt) => {

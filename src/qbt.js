@@ -1554,13 +1554,13 @@ function performRequest(opt, cookie, path, parameters) {
     method: "POST",
     headers: {
       Referer: ValidateIPaddress(opt.hostname)
-        ? opt.protocol + "//" + opt.hostname + opt.port != 80 || opt.port != 443
-          ? opt.protocol + "//" + opt.hostname + ":" + opt.port
+        ? opt.protocol + "//" + opt.hostname
+          ? opt.protocol + "//" + opt.hostname
           : ""
         : opt.protocol + "//" + opt.hostname,
       Origin: ValidateIPaddress(opt.hostname)
-        ? opt.protocol + "//" + opt.hostname + opt.port != 80 || opt.port != 443
-          ? opt.protocol + "//" + opt.hostname + ":" + opt.port
+        ? opt.protocol + "//" + opt.hostname
+          ? opt.protocol + "//" + opt.hostname
           : ""
         : opt.protocol + "//" + opt.hostname,
       "Content-Type": "application/x-www-form-urlencoded",
@@ -1568,7 +1568,6 @@ function performRequest(opt, cookie, path, parameters) {
       Cookie: cookie,
     },
   };
-
   return new Promise((resolve, reject) => {
     const req = protocol[options.protocol].request(options, (res) => {
       let data = [];
@@ -1585,11 +1584,6 @@ function performRequest(opt, cookie, path, parameters) {
             reject(new Error(`HTTP request error: ${res.statusCode}`));
           }
         });
-      console.log({
-        statusCode: res.statusCode,
-        statusMessage: res.statusMessage,
-        path: req.path,
-      });
     });
     req.on("error", (err) => reject(err));
 
